@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MovimientoPlayer : MonoBehaviour {
 
@@ -24,6 +25,13 @@ public class MovimientoPlayer : MonoBehaviour {
 
     [SerializeField]
     bool PersonajeSuperior = true;
+    public bool ConVida = true;
+
+    [SerializeField]
+    GameObject[] MuerteParticulas;
+
+    [SerializeField]
+    Canvas GGCanvas;
 
     void Start()
     {
@@ -33,66 +41,72 @@ public class MovimientoPlayer : MonoBehaviour {
 
     void FixedUpdate()
     {
-        if (PersonajeSuperior == true)
+        if (ConVida == true)
         {
-            TocandoSuelo = Physics2D.OverlapCircle(ComprobadorSuelo.position, RadioTocarSuelo, Suelo);
-        }
+            if (PersonajeSuperior == true)
+            {
+                TocandoSuelo = Physics2D.OverlapCircle(ComprobadorSuelo.position, RadioTocarSuelo, Suelo);
+            }
 
-        MovimientoInput = Input.GetAxis("Horizontal");
-        MiRb.velocity = new Vector2(MovimientoInput * Velocidad, MiRb.velocity.y);
+            MovimientoInput = Input.GetAxis("Horizontal");
+            MiRb.velocity = new Vector2(MovimientoInput * Velocidad, MiRb.velocity.y);
 
-        if (ViendoLadoDerecho == true && MovimientoInput < 0)
-        {
-            GirarVista();
+            if (ViendoLadoDerecho == true && MovimientoInput < 0)
+            {
+                GirarVista();
+            }
+            if (ViendoLadoDerecho == false && MovimientoInput > 0)
+            {
+                GirarVista();
+            }
         }
-        if (ViendoLadoDerecho == false && MovimientoInput > 0)
-        {
-            GirarVista();
-        }
-
     }
 
     private void Update()
     {
-        if (TocandoSuelo == true)
+        if (ConVida == true)
         {
-            SaltosExtra = CantidadDeSaltosExtra;
-        }
-
-        //Para Salto (Solo el personase superior Puede saltar)
-        if (PersonajeSuperior == true)
-        {
-            if (Input.GetKeyDown(KeyCode.UpArrow) && SaltosExtra > 0)
+            if (TocandoSuelo == true)
             {
-                MiRb.velocity = Vector2.up * FuerzaSalto;
-                SaltosExtra--;
-            }
-            else if (Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetKeyDown(KeyCode.W)) && SaltosExtra == 0 && TocandoSuelo == true)
-            {
-                MiRb.velocity = Vector2.up * FuerzaSalto;
-            }
-        } 
-
-        //Para Agacharse (Solo el personaje inferior puede saltar)
-        if (PersonajeSuperior == false)
-        {
-            //Para agacharse
-            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)){
-
-                //Cambiar Collider Para poder pasar por debajo
-                GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.15f);
-                GetComponent<BoxCollider2D>().size = new Vector2(0.64f, 0.3207791f);
-
+                SaltosExtra = CantidadDeSaltosExtra;
             }
 
-            //Para Levantarse
-            if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
+            //Para Salto (Solo el personase superior Puede saltar)
+            if (PersonajeSuperior == true)
             {
+                if (Input.GetKeyDown(KeyCode.UpArrow) && SaltosExtra > 0)
+                {
+                    MiRb.velocity = Vector2.up * FuerzaSalto;
+                    SaltosExtra--;
+                }
+                else if (Input.GetKeyDown(KeyCode.UpArrow) || (Input.GetKeyDown(KeyCode.W)) && SaltosExtra == 0 && TocandoSuelo == true)
+                {
+                    MiRb.velocity = Vector2.up * FuerzaSalto;
+                }
+            }
 
-                //Cambiar Collider Para levantarse
-                GetComponent<BoxCollider2D>().offset = new Vector2(0, 0);
-                GetComponent<BoxCollider2D>().size = new Vector2(0.64f, 0.64f);
+            //Para Agacharse (Solo el personaje inferior puede saltar)
+            if (PersonajeSuperior == false)
+            {
+                //Para agacharse
+                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+                {
 
+                    //Cambiar Collider Para poder pasar por debajo
+                    GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.15f);
+                    GetComponent<BoxCollider2D>().size = new Vector2(0.64f, 0.3207791f);
+
+                }
+
+                //Para Levantarse
+                if (Input.GetKeyUp(KeyCode.DownArrow) || Input.GetKeyUp(KeyCode.S))
+                {
+
+                    //Cambiar Collider Para levantarse
+                    GetComponent<BoxCollider2D>().offset = new Vector2(0, 0);
+                    GetComponent<BoxCollider2D>().size = new Vector2(0.64f, 0.64f);
+
+                }
             }
         }
     }
@@ -103,5 +117,27 @@ public class MovimientoPlayer : MonoBehaviour {
         Vector3 Escala = transform.localScale;
         Escala.x *= -1;
         transform.localScale = Escala;
+    }
+
+    private void OnCollisionEnter2D(Collision2D otro)
+    {
+        if (otro.gameObject.tag == "GG")
+        {
+            GameOver();
+        }
+    }
+
+    public void GameOver()
+    {
+        if(PersonajeSuperior == true)
+        {
+            GameObject ExplosionMuerte = Instantiate(MuerteParticulas[0], transform.position, Quaternion.identity);
+        } else
+        {
+            GameObject ExplosionMuerte = Instantiate(MuerteParticulas[1], transform.position, Quaternion.identity);
+        }
+
+        gameObject.SetActive(false);
+        GGCanvas.gameObject.SetActive(true);
     }
 }

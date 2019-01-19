@@ -16,12 +16,15 @@ public class MovimientoCamara : MonoBehaviour {
 
     private void Update()
     {
-        PosTemporal = new Vector3(((Jugadores[0].transform.position.x + Jugadores[1].transform.position.x)) / 2,
-        transform.position.y, transform.position.z);
+        if (Jugadores[0].GetComponent<MovimientoPlayer>().ConVida == true &&
+            Jugadores[1].GetComponent<MovimientoPlayer>().ConVida == true) {
+            PosTemporal = new Vector3(((Jugadores[0].transform.position.x + Jugadores[1].transform.position.x)) / 2,
+            transform.position.y, transform.position.z);
 
-        if (PosTemporal.x > posMinMax[0] && transform.position.x < posMinMax[1])
-        {
-            transform.position = PosTemporal;
+            if (PosTemporal.x > posMinMax[0] && transform.position.x < posMinMax[1])
+            {
+                transform.position = PosTemporal;
+            }
         }
     }
 }

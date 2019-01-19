@@ -14,6 +14,9 @@ public class PlataformaFall : MonoBehaviour {
     [SerializeField]
     float VelocidadMovimiento;
 
+    [SerializeField]
+    bool Caible = false;
+
     //Se eleje desde palanca
     public int ElejirPunto;
 
@@ -21,6 +24,17 @@ public class PlataformaFall : MonoBehaviour {
     private void FixedUpdate()
     {
         Movimiento();
+    }
+
+    private void OnCollisionEnter2D(Collision2D otro)
+    {
+        if (Caible == true)
+        {
+            if (otro.gameObject.tag == "Player")
+            {
+                Activado = true;
+            }
+        }
     }
 
 

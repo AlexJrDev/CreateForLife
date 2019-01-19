@@ -10,7 +10,7 @@ public class CambioDeEscena : MonoBehaviour {
 
     public Animator animadorUI;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("Player"))
         {
@@ -20,7 +20,7 @@ public class CambioDeEscena : MonoBehaviour {
 
     IEnumerator CargarEscena()
     {
-        animadorUI.SetTrigger("Iniciar");
+        animadorUI.SetBool("Iniciar",true);
         yield return new WaitForSeconds(1f);
         SceneManager.LoadScene(Escena);
     }
