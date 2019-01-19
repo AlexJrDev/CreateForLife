@@ -78,10 +78,10 @@ public class MovimientoPlayer : MonoBehaviour {
         {
             //Para agacharse
             if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)){
-                
+
                 //Cambiar Collider Para poder pasar por debajo
-                GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.25f);
-                GetComponent<BoxCollider2D>().size = new Vector2(0, 0.5f);
+                GetComponent<BoxCollider2D>().offset = new Vector2(0, -0.15f);
+                GetComponent<BoxCollider2D>().size = new Vector2(0.64f, 0.3207791f);
 
             }
 
@@ -90,8 +90,8 @@ public class MovimientoPlayer : MonoBehaviour {
             {
 
                 //Cambiar Collider Para levantarse
-                GetComponent<BoxCollider2D>().offset = new Vector2(0, 1);
-                GetComponent<BoxCollider2D>().size = new Vector2(0, 1);
+                GetComponent<BoxCollider2D>().offset = new Vector2(0, 0);
+                GetComponent<BoxCollider2D>().size = new Vector2(0.64f, 0.64f);
 
             }
         }
