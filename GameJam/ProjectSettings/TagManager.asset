@@ -44,3 +44,9 @@ TagManager:
   - name: Escenario
     uniqueID: 4092684653
     locked: 0
+  - name: Player
+    uniqueID: 1900572013
+    locked: 0
+  - name: CambioEscena
+    uniqueID: 246996137
+    locked: 0

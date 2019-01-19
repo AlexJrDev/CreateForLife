@@ -11,9 +11,23 @@ public class Palanca : MonoBehaviour {
     [SerializeField]
     bool PalancaTrampa = false;
 
+    [SerializeField]
+    bool Cambio = true;
+    Animator MiAnimator;
+
+    private void Start()
+    {
+        MiAnimator = GetComponent<Animator>();
+    }
+
+    private void FixedUpdate()
+    {
+        MiAnimator.SetBool("Cambio", Cambio);
+    }
+
     private void OnTriggerStay2D(Collider2D jugador)
     {
-        if (jugador.CompareTag("player") && Input.GetKeyDown(KeyCode.Space))
+        if (jugador.tag == "Player" && Input.GetKeyDown(KeyCode.Space))
         {
 
             if(PalancaTrampa == false)
@@ -25,9 +39,8 @@ public class Palanca : MonoBehaviour {
             }
 
             MiPlataforma.Activado = true;
+            Cambio = !Cambio;
             
         }
     }
-
-
 }
